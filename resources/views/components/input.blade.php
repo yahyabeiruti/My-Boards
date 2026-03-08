@@ -1,5 +1,7 @@
 @props(['label', 'name', 'type'=>'text'])
 
+
+
 <x-label :for="$name">{{ $label }}</x-label>
 <input
 type="{{ $type }}"

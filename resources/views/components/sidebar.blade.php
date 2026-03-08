@@ -13,8 +13,23 @@
                 <span class="">
                     {{ Auth::User()->name }}
                 </span>
-                
             </a>
+
+            <a  href="{{ route('show.request') }}"
+                class="flex items-center justify-center gap-3 py-2 px-3 border-r-4 pl-2 border-l-4  pr-2 text-white  hover:bg-gray-700 rounded-lg ">
+                Shared Requests
+            </a>
+
+            <a href="{{ route('boards.shared') }}" 
+               class="flex items-center justify-center gap-3 py-2 px-3 border-r-4 pl-2 border-l-4  pr-2 text-white  hover:bg-gray-700 rounded-lg ">
+               Shared With Me
+            </a>
+
+            <a href="{{ route('boards.manage-shared') }}" 
+               class="flex items-center justify-center gap-3 py-2 px-3 border-r-4 pl-2 border-l-4  pr-2 text-white  hover:bg-gray-700 rounded-lg ">
+               Boards I’ve Shared
+            </a>
+
             @endauth
         </nav>
         {{ $slot }}

@@ -11,80 +11,198 @@
             </div>
             
 
-                
-            <div class="flex items-center gap-3">
-                
-                <form action="{{    route('boards.destroy', $board->id)   }}" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit"   class="hover:text-white hover:dark:bg-gray-900 hover:shadow-xl p-1 rounded-lg text-3xl fa-solid fa-trash-can"></button>
-                </form>
-            </div>
+            @if(auth()->id() === $board->user_id)
+                <div class="flex items-center gap-3">
+                    <form  class="flex items-center gap-3">
+                        @csrf
+                        <!-- <x-input-share-board name="email" value="username@gmail.com"></x-input-share-board> -->
+                        <a href="{{    route('boards.shareBoard', $board->id)   }}" :active="request()->is('share')"  class="hover:text-white hover:dark:bg-gray-900 hover:shadow-xl p-1 rounded-lg text-3xl fa-solid fa-share-from-square"></a>
+                        
+                    </form>
+                    <form action="{{    route('boards.destroy', $board->id)   }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit"   class="hover:text-white hover:dark:bg-gray-600 hover:shadow-xl p-1 rounded-lg text-3xl fa-solid fa-trash-can"></button>
+                    </form>
+                </div>
+            @else()
+                <div class="flex items-center gap-3">
+                    <form  class="flex items-center gap-3">
+                        @csrf
+                        <!-- <x-input-share-board name="email" value="username@gmail.com"></x-input-share-board> -->
+                        <p title="You Cannot Share This Board" class=" text-gray-600  p-1 rounded-lg text-3xl fa-solid fa-share-from-square"></p>
+                          
+                        
+                    </form>
+                    <p title="You Cannot Delete This Board" class=" text-gray-600  p-1 rounded-lg text-3xl fa-solid fa-trash-can">
+                        
+                          
+                    </p>
+                </div>
+            @endif
             
             
-            
-            
+        <!-- To Do, In progress, Done ---------------------- -->
         </div>
-        <div class="board">
-            <div class="status-table border-b border-gray-500" data-status="todo">
-            <h3 class="text-xl font-semibold mb-3">To Do</h3>
-                @foreach($Tasks ->where('status',   'todo') as $task)
-                    <div  class="task flex items-center px-3 py-2 rounded mb-2 hover:border hover:border-gray-600 hover:bg-white/20 transition border-r-2 border-gray-600 pl-2 border-l-2 cursor-grabbing" 
-                        draggable=true
-                        data-id="{{ $task->id   }}">
-                        
-
-                        <i class="fa-solid fa-circle mr-2"></i>
-                        
-                        <div>
-                            <div class="text-xl font-semibold">{{    $task->title   }}</div>
-                            <div class="text-sm">{{  $task->discription  }}</div>
-                            <div class="text-xs text-gray-600"><i class="fa-regular fa-calendar"></i> {{  $task->due_date }} | {{  $task->category }} | <i class="fa-regular fa-flag"></i> {{  $task->priority }}</div>
-                        </div>
-                    
-                    </div>
-                    
-                @endforeach
-            </div>
-            <div class="status-table border-b border-gray-500" data-status="in_progress">
-            <h3 class="text-xl font-semibold mb-3">In Progress</h3>
-                @foreach($Tasks ->where('status',   'in_progress')  as $task)    
-                    
-                    <div   
-                        draggable="true"
-                        class="task flex items-center px-3 py-2 rounded mb-2 hover:border hover:border-gray-600 hover:bg-white/20 transition border-r-2 border-gray-600 pl-2 border-l-2 cursor-grabbing" 
-                        data-id="{{ $task->id   }}">
-                        
-                        <i class="fa-solid fa-circle mr-2"></i>
-                        
-                        <div>
-                            <div class="text-xl font-semibold">{{    $task->title   }}</div>
-                            <div class="text-sm">{{  $task->discription  }}</div>
-                            <div class="text-xs text-gray-600"><i class="fa-regular fa-calendar"></i> {{  $task->due_date }} | {{  $task->category }} | <i class="fa-regular fa-flag"></i> {{  $task->priority }}</div>
-                        </div>
-                    
-                    </div>
-                    
-                @endforeach
-            </div>
-            <div class="status-table" data-status="done">
-            <h3 class="text-xl font-semibold mb-3">Done</h3>
-                @foreach($Tasks ->where('status',   'done') as $task)
-                    <div 
-                        draggable="true"
-                        class="task flex items-center px-3 py-2 rounded mb-2 hover:border hover:border-gray-600 hover:bg-white/20 transition border-r-2 border-gray-600 pl-2 border-l-2 cursor-grabbing" 
-                        data-id="{{ $task->id   }}">
-                        
-                        <i class="fa-solid fa-circle mr-2"></i>
+        <div class="board grid grid-cols-3 gap-4 items-start">
+            <div class="bg-[#fdf0d5] status-table  border-b border-gray-500 hover:scale-105 transition-transform duration-500 rounded-sm p-4 mr-4 max-w-90" 
+                 data-status="todo">
+                <div class="border-b border-gray-400">
+                    <h3 class="text-xl font-semibold mb-3">To Do</h3>
+                </div>
+                    <div>
+                        @foreach($Tasks ->where('status',   'todo') as $task)
                             
-                        <div>
-                            <div class="text-xl font-semibold">{{    $task->title   }}</div>
-                            <div class="text-sm">{{  $task->discription  }}</div>
-                            <div class="text-xs text-gray-600"><i class="fa-regular fa-calendar"></i> {{  $task->due_date }} | {{  $task->category }} | <i class="fa-regular fa-flag"></i> {{  $task->priority }}</div>
-                        </div>
-                                                
+                            <div  class="flex justify-between bg-gray-100 mt-2 task items-center px-3 py-2 rounded-sm mb-2 hover:shadow-xl hover:scale-105 transition-transform duration-500 border-gray-600 pl-2 cursor-grabbing" 
+                                draggable=true
+                                data-id="{{ $task->id   }}">
+
+                                <div class="flex items-center">
+                                    <i class="fa-solid fa-circle mr-2 text-gray-600"></i>
+                                    <div>
+                                        <div class="text-xl font-semibold">{{    $task->title   }}</div>
+                                        <div class="text-sm">{{  $task->discription  }}</div>
+                                        <div class="text-xs text-gray-600"><i class="fa-regular fa-calendar"></i> {{  $task->due_date }} | {{  $task->category }} | <i class="fa-regular fa-flag"></i> {{  $task->priority }}</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    @if(auth()->id() === $board->user_id)
+                                        <form action="{{ route('tasks.edit', $task->id) }} " method="GET" >
+                                            @csrf
+                                            
+                                            <button type="submit"   class=" hover:text-white hover:dark:bg-gray-600 hover:shadow-xl p-1 rounded-lg text-3xl  text-gray-600"><i class="fa-solid fa-pen-to-square "></i></button>
+                                        </form>
+                                        <form action="{{ route('tasks.delete', $task->id) }} " method="POST" >
+                                            @csrf
+                                            
+                                            <button type="submit"   class=" hover:text-white hover:dark:bg-gray-600 hover:shadow-xl p-1 rounded-lg text-3xl  text-gray-600"><i class="fa-solid fa-trash-can"></i></button>
+                                        </form>
+                                    @else
+                                    <form  >
+                                        @csrf
+                                        
+                                        <p type="submit"   class="  p-1 rounded-lg text-3xl  text-gray-300"><i class="fa-solid fa-pen-to-square "></i></p>
+                                    </form>
+                                    <form>
+                                        @csrf
+                                        
+                                        <p type="submit"   class="  p-1 rounded-lg text-3xl  text-gray-300"><i class="fa-solid fa-trash-can"></i></p>
+                                    </form>
+                                    @endif
+                                </div>
+                            
+                            </div>
+                        @endforeach
+                    
                     </div>
-                @endforeach
+                    
+                
+            </div>
+            <div class="bg-[#fdf0d5] status-table  border-b border-gray-500 hover:scale-105 transition-transform duration-500 rounded-sm p-4 mr-4 max-w-90" 
+                 data-status="in_progress">
+                <div class="border-b border-gray-400">
+                    <h3 class="text-xl font-semibold mb-3">In Progress</h3>
+                </div>
+                    <div>
+                        @foreach($Tasks ->where('status',   'in_progress') as $task)
+                            
+                            <div  class="flex justify-between bg-gray-100 mt-2 task items-center px-3 py-2 rounded-sm mb-2 hover:shadow-xl hover:scale-105 transition-transform duration-500 border-gray-600 pl-2 cursor-grabbing" 
+                                draggable=true
+                                data-id="{{ $task->id   }}">
+
+                                <div class="flex items-center">
+                                    <i class="fa-solid fa-circle mr-2 text-gray-600"></i>
+                                    <div>
+                                        <div class="text-xl font-semibold">{{    $task->title   }}</div>
+                                        <div class="text-sm">{{  $task->discription  }}</div>
+                                        <div class="text-xs text-gray-600"><i class="fa-regular fa-calendar"></i> {{  $task->due_date }} | {{  $task->category }} | <i class="fa-regular fa-flag"></i> {{  $task->priority }}</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    @if(auth()->id() === $board->user_id)
+                                        <form action="{{ route('tasks.edit', $task->id) }} " method="GET" >
+                                            @csrf
+                                            
+                                            <button type="submit"   class=" hover:text-white hover:dark:bg-gray-600 hover:shadow-xl p-1 rounded-lg text-3xl  text-gray-600"><i class="fa-solid fa-pen-to-square "></i></button>
+                                        </form>
+                                        <form action="{{ route('tasks.delete', $task->id) }} " method="POST" >
+                                            @csrf
+                                            
+                                            <button type="submit"   class=" hover:text-white hover:dark:bg-gray-600 hover:shadow-xl p-1 rounded-lg text-3xl  text-gray-600"><i class="fa-solid fa-trash-can"></i></button>
+                                        </form>
+                                    @else
+                                    <form  >
+                                        @csrf
+                                        
+                                        <p type="submit"   class="  p-1 rounded-lg text-3xl  text-gray-300"><i class="fa-solid fa-pen-to-square "></i></p>
+                                    </form>
+                                    <form>
+                                        @csrf
+                                        
+                                        <p type="submit"   class="  p-1 rounded-lg text-3xl  text-gray-300"><i class="fa-solid fa-trash-can"></i></p>
+                                    </form>
+                                    @endif
+                                </div>
+                            
+                            </div>
+                        @endforeach
+                    
+                    </div>
+                    
+                
+            </div>
+            <div class="bg-[#fdf0d5] status-table  border-b border-gray-500 hover:scale-105 transition-transform duration-500 rounded-sm p-4 mr-4 max-w-90" 
+                 data-status="done">
+                <div class="border-b border-gray-400">
+                    <h3 class="text-xl font-semibold mb-3">Done</h3>
+                </div>
+                    <div>
+                        @foreach($Tasks ->where('status',   'done') as $task)
+                            
+                            <div  class="flex justify-between bg-gray-100 mt-2 task items-center px-3 py-2 rounded-sm mb-2 hover:shadow-xl hover:scale-105 transition-transform duration-500 border-gray-600 pl-2 cursor-grabbing" 
+                                draggable=true
+                                data-id="{{ $task->id   }}">
+
+                                <div class="flex items-center">
+                                    <i class="fa-solid fa-circle mr-2 text-gray-600"></i>
+                                    <div>
+                                        <div class="text-xl font-semibold">{{    $task->title   }}</div>
+                                        <div class="text-sm">{{  $task->discription  }}</div>
+                                        <div class="text-xs text-gray-600"><i class="fa-regular fa-calendar"></i> {{  $task->due_date }} | {{  $task->category }} | <i class="fa-regular fa-flag"></i> {{  $task->priority }}</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    @if(auth()->id() === $board->user_id)
+                                        <form action="{{ route('tasks.edit', $task->id) }} " method="GET" >
+                                            @csrf
+                                            
+                                            <button type="submit"   class=" hover:text-white hover:dark:bg-gray-600 hover:shadow-xl p-1 rounded-lg text-3xl  text-gray-600"><i class="fa-solid fa-pen-to-square "></i></button>
+                                        </form>
+                                        <form action="{{ route('tasks.delete', $task->id) }} " method="POST" >
+                                            @csrf
+                                            
+                                            <button type="submit"   class=" hover:text-white hover:dark:bg-gray-600 hover:shadow-xl p-1 rounded-lg text-3xl  text-gray-600"><i class="fa-solid fa-trash-can"></i></button>
+                                        </form>
+                                    @else
+                                        <form  >
+                                            @csrf
+                                            
+                                            <p type="submit"   class="  p-1 rounded-lg text-3xl  text-gray-300"><i class="fa-solid fa-pen-to-square "></i></p>
+                                        </form>
+                                        <form>
+                                            @csrf
+                                            
+                                            <p type="submit"   class="  p-1 rounded-lg text-3xl  text-gray-300"><i class="fa-solid fa-trash-can"></i></p>
+                                        </form>
+                                    @endif
+                                </div>
+                            
+                            </div>
+                        @endforeach
+                    
+                    </div>
+                    
+                
             </div>
         </div>
     </div>
@@ -141,7 +259,7 @@
                         <x-input-task name="title"  label="Title"   type="text"></x-input-task>
                         <x-input-task name="discription"  label="Discription"   type="text"></x-input-task>
                     </div>
-                    <div >
+                    <div>
                         <x-select name="priority" label="Priority">
                             <option value="low">Low</option>
                             <option value="medium">Medium</option>

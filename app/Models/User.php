@@ -47,4 +47,15 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function sharedBoards()
+    {
+        return $this->belongsToMany(
+            Boards::class,
+            'board_user',
+            'user_id',
+            'board_id',
+        )->withTimestamps();
+
+    }
 }

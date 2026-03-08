@@ -17,7 +17,6 @@
     </div>
     <x-input class="border-black" label="Enter Discription for your Board" name="discription" type="text"/>
 
-    <input value="{{ Auth::User()->id }}" type="int" name="user_id" style="display: none;">
 
     <x-button>submit</x-button>
 </form>

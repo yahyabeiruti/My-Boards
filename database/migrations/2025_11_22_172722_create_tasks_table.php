@@ -11,9 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('add_tasks', function (Blueprint $table) {
+        Schema::create('tasks', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('board_id')->constrained()->onDelete('cascade');
             $table->foreignId('board_id')->constrained()->onDelete('cascade');
             $table->string('title');
             $table->string('discription')->nullable();
@@ -21,7 +20,6 @@ return new class extends Migration
             $table->date('due_date')->nullable();
             $table->string('category')->nullable();
             $table->enum('status',['todo', 'in_progress', 'done']);
-            
             $table->timestamps();
         });
     }
@@ -31,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('add_tasks');
+        Schema::dropIfExists('tasks');
     }
 };
